@@ -1,64 +1,44 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>SMS - Dhanshree Tembhe</title>
 <style>
-body{font-family:Arial;background:#e3f2fd;margin:0;padding:15px}
-.container{max-width:500px;margin:auto;background:white;padding:20px;border-radius:15px;box-shadow:0 4px 15px rgba(0,0,0,0.2)}
-h1{text-align:center;color:#1565c0;margin-bottom:5px}
-p.sub{text-align:center;color:green;margin-top:0}
-button{width:100%;padding:15px;margin:8px 0;font-size:18px;border:none;border-radius:10px;cursor:pointer;font-weight:bold}
-.btn1{background:#2196f3;color:white}
-.btn2{background:#4caf50;color:white}
-.btn3{background:#f44336;color:white}
-.btn4{background:#9e9e9e;color:white}
-.box{margin-top:20px;padding:15px;border:2px dashed #2196f3;border-radius:10px;display:none;background:#f9f9f9}
-input{width:95%;padding:10px;margin:5px 0;border:1px solid #ccc;border-radius:5px}
-table{width:100%;border-collapse:collapse;margin-top:10px}
-th,td{border:1px solid #ddd;padding:8px;text-align:left}
-th{background:#2196f3;color:white}
+body{font-family:Arial;text-align:center;background:#e8eef7;padding:20px}
+.box{background:#fff;padding:25px;border-radius:20px;max-width:360px;margin:auto}
+button{width:100%;padding:12px;margin:6px 0;border:0;border-radius:8px;color:#fff;font-weight:bold}
+.b1{background:#22a559}.b2{background:#2e68d1}.b3{background:#e23a3a}.b4{background:#999}
+input{width:92%;padding:10px;margin:6px 0;border:1px solid #ccc;border-radius:8px}
+#out{margin-top:12px;background:#e6f9e6;padding:12px;border-radius:8px}
 </style>
 </head>
 <body>
-<div class="container">
-<h1>WELCOME TO SMS</h1>
-<p class="sub">Created by Dhanshree Tembhe</p>
-<button class="btn1" onclick="showAdd()">1. ADD NEW STUDENT</button>
-<button class="btn2" onclick="showView()">2. VIEW STUDENT LIST</button>
-<button class="btn3" onclick="showDelete()">3. DELETE STUDENT</button>
-<button class="btn4" onclick="showExit()">4. EXIT</button>
-<div id="addBox" class="box">
-<h3>Add New Student</h3>
-<input id="roll" placeholder="Enter Roll No">
-<input id="name" placeholder="Enter Student Name">
-<button class="btn1" onclick="addStudent()">Add Student</button>
-<p id="addMsg"></p>
-</div>
-<div id="viewBox" class="box">
-<h3>Student List</h3>
-<div id="list"></div>
-</div>
-<div id="deleteBox" class="box">
-<h3>Delete Student</h3>
-<input id="delRoll" placeholder="Enter Roll No to Delete">
-<button class="btn3" onclick="deleteStudent()">Delete</button>
-<p id="delMsg"></p>
-</div>
-<div id="exitBox" class="box" style="text-align:center">
-<h3>Thank you...!</h3>
-<p>Project by Dhanshree Tembhe</p>
-</div>
+<div class="box">
+<h3>WELCOME TO SMS</h3>
+<p>Student Management System</p>
+<input id="name" placeholder="Enter student name">
+<input id="roll" placeholder="Enter roll number">
+<button class="b1" onclick="add()">+ ADD NEW STUDENT</button>
+<button class="b2" onclick="view()">VIEW STUDENT</button>
+<button class="b3" onclick="del()">DELETE STUDENT</button>
+<button class="b4" onclick="exitApp()">EXIT</button>
+<div id="out">Student Added</div>
 </div>
 <script>
-let students={"101":"Dhanshree Tembhe","102":"Yashshree Tembhe","103":"Ketan Pawar","104":"Aniket Pawar"};
-function hideAll(){document.querySelectorAll('.box').forEach(b=>b.style.display='none');}
-function showAdd(){hideAll();document.getElementById('addBox').style.display='block';}
-function showView(){hideAll();document.getElementById('viewBox').style.display='block';let html="<table><tr><th>Roll No</th><th>Name</th></tr>";for(let r in students){html+=`<tr><td>${r}</td><td>${students[r]}</td></tr>`;}html+="</table><p>Total: "+Object.keys(students).length+" Students</p>";document.getElementById('list').innerHTML=html;}
-function showDelete(){hideAll();document.getElementById('deleteBox').style.display='block';}
-function showExit(){hideAll();document.getElementById('exitBox').style.display='block';}
-function addStudent(){let r=document.getElementById('roll').value;let n=document.getElementById('name').value;if(r&&n){students[r]=n;document.getElementById('addMsg').innerText=`Student ${n} added!`;document.getElementById('roll').value='';document.getElementById('name').value='';}else{document.getElementById('addMsg').innerText="Enter both!";}}
-function deleteStudent(){let r=document.getElementById('delRoll').value;if(students[r]){delete students[r];document.getElementById('delMsg').innerText=`Roll ${r} deleted!`;}else{document.getElementById('delMsg').innerText="Not found!";}document.getElementById('delRoll').value='';}
+  let students=[];
+function add(){
+let n=name.value, r=roll.value;
+if(n&&r){
+students.push(n+" - "+r);
+out.innerHTML="Student Added: "+n+"<br>Roll: "+r;
+name.value=""; roll.value="";
+}else out.innerHTML="Enter Name & Roll!";
+}
+function view(){
+if(students.length==0) out.innerHTML="No Students Yet";
+else out.innerHTML="<b>Student Details:</b><br>"+students.join("<br>");
+  }
+  function del(){students=[];out.innerHTML="All Students Deleted";}
+function exitApp(){out.innerHTML="Thank you...!";}
 </script>
 </body>
 </html>
