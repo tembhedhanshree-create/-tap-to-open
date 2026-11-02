@@ -3,60 +3,97 @@
 <head>
 <title>SMS</title>
 <style>
-body{font-family:Arial;text-align:center;background:#f0f0f0;margin-top:50px}
-.box{background:white;width:300px;margin:auto;padding:20px;border-radius:10px;box-shadow:0 0 10px gray}
-input{width:90%;padding:8px;margin:5px;border:1px solid gray;border-radius:5px}
-button{padding:8px 15px;margin:5px;background:#4CAF50;color:white;border:none;border-radius:5px;cursor:pointer}
-button:hover{background:#45a049}
-#list{margin-top:15px;text-align:left}
+body{font-family:Arial;text-align:center;background:#eef2f7;margin-top:30px}
+.box{background:white;width:340px;margin:auto;padding:20px;border-radius:12px;box-shadow:0 4px 15px gray}
+input{width:90%;padding:10px;margin:5px;border:1px solid #ccc;border-radius:6px}
+button{padding:10px 15px;margin:5px;background:#4CAF50;color:white;border:none;border-radius:6px;cursor:pointer;font-weight:bold}
+#list{text-align:left;background:#f8f9fa;padding:10px;border-radius:8px;margin-top:15px}
+.student{padding:10px;border:1px solid #ddd;margin:5px 0;border-radius:6px;background:white;display:flex;justify-content:space-between;align-items:center}
+.delBtn{background:#f44336;padding:5px 10px;font-size:12px}
+.msg{color:green;font-weight:bold;margin-top:10px}
 </style>
 </head>
 <body>
 <div class="box">
 <h2>WELCOME TO SMS</h2>
-<p>Student Management System</p>
-<input id="name" placeholder="Enter Name">
-<input id="roll" placeholder="Enter Roll No">
-<br>
-<button onclick="addStudent()">ADD STUDENT</button>
-<button onclick="viewStudent()">VIEW STUDENT</button>
-<button onclick="deleteStudent()">DELETE</button>
-<button onclick="location.reload()">EXIT</button>
+<input id="name" placeholder="Name">
+<input id="roll" placeholder="Roll No"><br>
+<button onclick="addStudent()">ADD</button>
+<button onclick="viewStudent()" style="background:#2196F3">VIEW - 4 Student</button>
+<button onclick="deleteMode()" style="background:#f44336">DELETE - 4 Student</button>
+
+<div id="msg" class="msg"></div>
+<h3>Student List:</h3>
 <div id="list"></div>
 </div>
 
 <script>
-let students = JSON.parse(localStorage.getItem("students") || "[]");
+let students = [
+  {name:"Dhanshree Tembhe", roll:"101"},
+  {name:"Sakshi Patil", roll:"102"},
+  {name:"Pooja Sharma", roll:"103"},
+  {name:"Anjali Deshmukh", roll:"104"}
+];
+
+let isDeleteMode = false;
+
+show(0);
+
+function show(mode){
+ let l=document.getElementById("list");
+ let h="";
+ if(mode==1) isDeleteMode=true;
+ if(mode==0) isDeleteMode=false;
+
+ students.forEach((s,i)=>{
+   if(isDeleteMode){
+     h+= `<div class="student" onclick="deleteThis(${i})"><span>${i+1}. ${s.name} - ${s.roll}</span><button class="delBtn">TAP TO DELETE</button></div>`;
+   } else {
+     h+= `<div class="student"><span>${i+1}. ${s.name} - ${s.roll}</span></div>`;
+   }
+ });
+ l.innerHTML=h || "<p>List empty</p>";
+}
 
 function addStudent(){
- let n = document.getElementById("name").value;
- let r = document.getElementById("roll").value;
- if(n=="" || r==""){ alert("Name aani Roll No tak!"); return; }
- students.push({name:n, roll:r});
- localStorage.setItem("students", JSON.stringify(students));
- alert(n + " add jhala!");
- document.getElementById("name").value="";
- document.getElementById("roll").value="";
- viewStudent();
+ let n=document.getElementById("name").value;
+ if(n!=""){
+   let r=document.getElementById("roll").value||"105";
+   students.push({name:n, roll:r});
+   document.getElementById("name").value="";
+   document.getElementById("roll").value="";
+   document.getElementById("msg").innerHTML="✅ Add Zala!";
+ }
+ show(0);
 }
 
 function viewStudent(){
- let l = document.getElementById("list");
- if(students.length==0){ l.innerHTML="<p>Khali kahi nahi!</p>"; return; }
- let html="<h4>Student List:</h4>";
- students.forEach((s,i)=>{
-   html+= `<p>${i+1}. ${s.name} - ${s.roll}</p>`;
- });
- l.innerHTML=html;
+ document.getElementById("msg").innerHTML="";
+ isDeleteMode=false;
+ show(0);
 }
 
-function deleteStudent(){
- let r = document.getElementById("roll").value;
- if(r==""){ alert("Delete karaycha Roll No tak!"); return; }
- students = students.filter(s=>s.roll!=r);
- localStorage.setItem("students", JSON.stringify(students));
- alert("Delete jhala!");
- viewStudent();
+function deleteMode(){
+ document.getElementById("msg").innerHTML="Jyala delete karaycha tyala TAP kara 👇";
+ isDeleteMode=true;
+ show(1);
+}
+
+function deleteThis(index){
+ let deletedName = students[index].name;
+ students.splice(index,1);
+ document.getElementById("msg").innerHTML = `🗑️ ${deletedName} Delete Zala!`;
+ show(isDeleteMode?1:0);
+ if(students.length==0){
+   students = [
+     {name:"Dhanshree Tembhe", roll:"101"},
+     {name:"Sakshi Patil", roll:"102"},
+     {name:"Pooja Sharma", roll:"103"},
+     {name:"Anjali Deshmukh", roll:"104"}
+   ];
+   document.getElementById("msg").innerHTML += "<br>Parat 4 load kele!";
+   show(1);
+ }
 }
 </script>
 </body>
