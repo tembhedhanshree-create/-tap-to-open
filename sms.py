@@ -1,4 +1,9 @@
-students = {}
+students = {
+    "101": "Dhanshree Tembhe",
+    "102": "Sakshi Patil", 
+    "103": "Pooja Sharma",
+    "104": "Anjali Deshmukh"
+}
 def add_new():
     name = input("Enter student name: ")
     roll = input("Enter roll no: ")
